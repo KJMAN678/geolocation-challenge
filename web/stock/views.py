@@ -1,5 +1,6 @@
 import json
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+from json import JSONDecodeError
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -26,6 +27,11 @@ def save_location(request: HttpRequest) -> HttpResponse:
         latitude = Decimal(str(data.get("latitude")))
         longitude = Decimal(str(data.get("longitude")))
 
+        if not (Decimal("-90") <= latitude <= Decimal("90")):
+            raise ValueError("Latitude must be between -90 and 90.")
+        if not (Decimal("-180") <= longitude <= Decimal("180")):
+            raise ValueError("Longitude must be between -180 and 180.")
+
         location = Location.objects.create(latitude=latitude, longitude=longitude)
 
         context = {
@@ -34,6 +40,12 @@ def save_location(request: HttpRequest) -> HttpResponse:
             "created_at": location.created_at,
         }
         return render(request, "stock/location_saved.html", context)
-    except (json.JSONDecodeError, TypeError, ValueError) as e:
-        context = {"error": str(e)}
+    except (
+        JSONDecodeError,
+        AttributeError,
+        TypeError,
+        ValueError,
+        InvalidOperation,
+    ) as e:
+        context = {"error": f"Invalid request data: {e}"}
         return render(request, "stock/location_error.html", context, status=400)
