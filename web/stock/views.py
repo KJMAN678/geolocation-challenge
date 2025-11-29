@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from .models import Location
@@ -17,6 +18,7 @@ def clicked(request: HttpRequest) -> HttpResponse:
     return render(request, "stock/clicked.html", context)
 
 
+@csrf_exempt
 @require_POST
 def save_location(request: HttpRequest) -> HttpResponse:
     try:
