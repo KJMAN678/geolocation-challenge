@@ -1,3 +1,9 @@
+### 説明
+
+- django-extensions の runserver_plus を使って、ローカル限定だが HTTPS化している
+- HTTPS化しないと [GeoLocation API](https://developer.mozilla.org/ja/docs/Web/API/Geolocation) を使えないっぽかったため
+- `certs/*.pem` や `certs/*.key` といったファイルは自動作成される
+
 
 ### Command
 
