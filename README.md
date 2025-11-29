@@ -10,9 +10,7 @@ $ docker compose exec backend uv run ruff format .
 # djlint によるフォーマット
 $ docker compose exec backend uv run djlint templates --extension html
 
-# 起動後、https://127.0.0.1:8000/ にアクセスしてください
-# 初回アクセス時、ブラウザにセキュリティ警告が表示されますが、これは自己署名証明書を
-# 利用しているためです。開発環境では、警告を無視してアクセスを続行してください。
+# ローカル限定でHTTPS化
 https://127.0.0.1:8000/
 https://127.0.0.1:8000/admin/
 
