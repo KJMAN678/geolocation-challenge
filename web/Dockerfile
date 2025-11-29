@@ -19,5 +19,5 @@ RUN apt-get update && \
         libpq-dev \
         gcc \
         python3-dev \
-    && uv sync --frozen --no-dev
+    && uv sync --frozen --no-dev \
     && rm -rf /var/lib/apt/lists/*
