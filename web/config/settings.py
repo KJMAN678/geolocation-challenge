@@ -20,6 +20,7 @@ ALLOWED_HOSTS: list[str | None] = [
     "host.docker.internal",
     "localhost",
     "127.0.0.1",
+    "172.18.0.3",
 ]
 
 
@@ -35,7 +36,8 @@ BASE_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "debug_toolbar",
+    # "debug_toolbar",
+    "django_extensions",
 ]
 
 CUSTOM_APPS = [
@@ -57,8 +59,8 @@ BASE_MIDDLEWARE = [
 
 THIRD_PARTY_MIDDLEWARE = []
 
-if DEBUG:
-    THIRD_PARTY_MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+# if DEBUG:
+#     THIRD_PARTY_MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 MIDDLEWARE = BASE_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
 

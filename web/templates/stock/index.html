@@ -6,4 +6,66 @@
             hx-target="#clicked"
             hx-swap="outerHTML">Click Me</button>
     <span id="clicked"></span>
+
+    <hr>
+
+    <h2>Geolocation</h2>
+    <button id="get-location-btn">Get My Location</button>
+    <div id="location-result"></div>
+
+    <script>
+        document.getElementById('get-location-btn').addEventListener('click', function() {
+            const resultDiv = document.getElementById('location-result');
+            resultDiv.innerHTML = '<p>Getting location...</p>';
+
+            if (!navigator.geolocation) {
+                resultDiv.innerHTML = '<p>Geolocation is not supported by your browser</p>';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    fetch('/save-location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            latitude: latitude,
+                            longitude: longitude
+                        })
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        resultDiv.innerHTML = html;
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML = '<p>Error saving location: ' + error + '</p>';
+                    });
+                },
+                function(error) {
+                    let errorMessage;
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = "User denied the request for Geolocation.";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = "Location information is unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = "The request to get user location timed out.";
+                            break;
+                        default:
+                            errorMessage = "An unknown error occurred.";
+                            break;
+                    }
+                    resultDiv.innerHTML = '<p>Error: ' + errorMessage + '</p>';
+                }
+            );
+        });
+    </script>
 {% endblock %}

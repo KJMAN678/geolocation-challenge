@@ -8,9 +8,17 @@ $ docker compose exec backend uv run django-admin startapp web web
 $ docker compose exec backend uv run ruff check . --fix
 $ docker compose exec backend uv run ruff format .
 # djlint によるフォーマット
-$ docker compose exec backend uv run djlint templates/*/*.html --extension=html.j2 --reformat
+$ docker compose exec backend uv run djlint templates --extension html
 
-http://127.0.0.1:8000/
+# ローカル限定でHTTPS化
+https://127.0.0.1:8000/
+https://127.0.0.1:8000/admin/
+
+$ docker compose exec backend uv run python manage.py makemigrations
+$ docker compose exec backend uv run python manage.py migrate
+
+# コンテナ作り直し
+$ source ./remake_container.sh
 
 # セキュリティチェック
 $ docker compose exec backend uv tool run djcheckup http://host.docker.internal:8000/web/
@@ -70,7 +78,7 @@ $ docker compose exec backend uv run pytest
 ### 7.Setup Local App
 
 ```sh
-$ http://127.0.0.1:8000/がアプリケーションのURL
+$ https://127.0.0.1:8000/がアプリケーションのURL
 ```
 
 #### 8.Additional Notes
